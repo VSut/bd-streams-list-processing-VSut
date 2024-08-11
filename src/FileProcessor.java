@@ -2,6 +2,7 @@ import listprocessing.ProjectServerManager;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FileProcessor {
 
@@ -22,7 +23,7 @@ public class FileProcessor {
      * @return Processed list.
      */
     public List<String> filterDocs(List<String> source) {
-        return null;
+        return source.stream().filter(s -> s.endsWith(".txt") || s.endsWith(".md")).map(String::toLowerCase).sorted().toList();
     }
 
     /**
@@ -32,7 +33,9 @@ public class FileProcessor {
      * @return Processed Set.
      */
     public Set<String> filterJava(List<String> source) {
-        return null;
+        return source.stream().filter(s -> s.endsWith(".java")).map(s -> {
+            return s.substring(0, 1).toUpperCase() + s.substring(1);
+        } ).collect(Collectors.toSet());
     }
 
     /**
@@ -42,6 +45,6 @@ public class FileProcessor {
      * @param source Source list.
      */
     public void sortAndSubmitAll(List<String> source) {
-
+        source.stream().sorted().forEach(serverManager::submitToProject);
     }
 }
